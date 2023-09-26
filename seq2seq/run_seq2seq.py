@@ -148,6 +148,8 @@ def main() -> None:
         tokenizer=tokenizer,
     )
 
+    assert 2==3, 'test stop here.'
+
     # Initialize Picard if necessary
     with PicardLauncher() if picard_args.launch_picard and training_args.local_rank <= 0 else nullcontext(None):
         # Get Picard model class wrapper
@@ -199,6 +201,9 @@ def main() -> None:
             trainer = SpiderTrainer(**trainer_kwargs)
         elif data_args.dataset in ["cosql", "cosql+spider"]:
             trainer = CoSQLTrainer(**trainer_kwargs)
+        elif data_args.dataset in ["squall",]:
+            # trainer = SquallTrainer(**trainer_kwargs)
+            pass
         else:
             raise NotImplementedError()
 

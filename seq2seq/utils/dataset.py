@@ -142,8 +142,8 @@ class DataArguments:
             "cosql": "./seq2seq/datasets/cosql",
             "spider_realistic": "./seq2seq/datasets/spider_realistic",
             "spider_syn": "./seq2seq/datasets/spider_syn",
-            "spider_dk": "./seq2seq/datasets/spider_dk"
-
+            "spider_dk": "./seq2seq/datasets/spider_dk",
+            "squall": "./seq2seq/datasets/squall"
         },
         metadata={"help": "Paths of the dataset modules."},
     )
@@ -217,6 +217,8 @@ def _prepare_train_split(
     pre_process_function: Callable[[dict, Optional[int], Optional[int]], dict],
 ) -> TrainSplit:
     schemas = _get_schemas(examples=dataset)
+    print(schemas)
+    assert 1==2
     dataset = dataset.map(
         add_serialized_schema,
         batched=False,

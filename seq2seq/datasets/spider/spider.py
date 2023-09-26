@@ -151,3 +151,4 @@ class Spider(datasets.GeneratorBasedBuilder):
                             for column_id, other_column_id in schema["foreign_keys"]
                         ],
                     }
+

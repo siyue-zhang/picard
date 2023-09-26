@@ -1,4 +1,4 @@
-import json
+import json, re
 from typing import Callable, Tuple
 import logging
 import datasets.load
@@ -34,6 +34,8 @@ def _log_duplicate_count(dataset: Dataset, dataset_name: str, split: str) -> Non
         )
 
 
+
+
 def load_dataset(
     data_args: DataArguments,
     model_args: ModelArguments,
@@ -44,6 +46,7 @@ def load_dataset(
     _spider_dataset_dict: Callable[[], DatasetDict] = lambda: datasets.load.load_dataset(
         path=data_args.dataset_paths["spider"], cache_dir=model_args.cache_dir
     )
+
     _spider_metric: Callable[[], Metric] = lambda: datasets.load.load_metric(
         path=data_args.metric_paths["spider"], config_name=data_args.metric_config, test_suite_db_dir=data_args.test_suite_db_dir
     )
@@ -58,6 +61,31 @@ def load_dataset(
         data_training_args=data_training_args,
         tokenizer=tokenizer,
     )
+
+
+    assert 1==2
+    ##################
+
+    # _squall_dataset_dict: Callable[[], DatasetDict] = lambda: datasets.load.load_dataset(
+    #     path=data_args.dataset_paths["squall"], cache_dir=model_args.cache_dir
+    # )
+
+    # _squall_metric: Callable[[], Metric] = lambda: datasets.load.load_metric(
+    #     path=data_args.metric_paths["squall"], config_name=data_args.metric_config, test_suite_db_dir=data_args.test_suite_db_dir
+    # )
+    # _squall_add_serialized_schema = lambda ex: squall_add_serialized_schema(
+    #     ex=ex,
+    #     data_training_args=data_training_args,
+    # )
+    # _squall_pre_process_function = lambda batch, max_source_length, max_target_length: squall_pre_process_function(
+    #     batch=batch,
+    #     max_source_length=max_source_length,
+    #     max_target_length=max_target_length,
+    #     data_training_args=data_training_args,
+    #     tokenizer=tokenizer,
+    # )
+
+    ##################
 
     _cosql_dataset_dict: Callable[[], DatasetDict] = lambda: datasets.load.load_dataset(
         path=data_args.dataset_paths["cosql"], cache_dir=model_args.cache_dir
