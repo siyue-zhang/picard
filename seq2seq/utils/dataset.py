@@ -356,6 +356,7 @@ def serialize_schema(
     schema_serialization_with_db_id: bool = True,
     schema_serialization_with_db_content: bool = False,
     normalize_query: bool = True,
+    is_squall: bool = False
 ) -> str:
     if schema_serialization_type == "verbose":
         db_id_str = "Database: {db_id}. "
@@ -380,12 +381,15 @@ def serialize_schema(
     def get_column_str(table_name: str, column_name: str) -> str:
         column_name_str = column_name.lower() if normalize_query else column_name
         if schema_serialization_with_db_content:
-            matches = get_database_matches(
-                question=question,
-                table_name=table_name,
-                column_name=column_name,
-                db_path=(db_path + "/" + db_id + "/" + db_id + ".sqlite"),
-            )
+            if is_squall:
+                matches = []
+            else:
+                matches = get_database_matches(
+                    question=question,
+                    table_name=table_name,
+                    column_name=column_name,
+                    db_path=(db_path + "/" + db_id + "/" + db_id + ".sqlite"),
+                )
             if matches:
                 return column_str_with_values.format(column=column_name_str, values=value_sep.join(matches))
             else:
@@ -417,4 +421,9 @@ def serialize_schema(
         serialized_schema = db_id_str.format(db_id=db_id) + table_sep.join(tables)
     else:
         serialized_schema = table_sep.join(tables)
+    
+    print("CHECK")
+    print(serialized_schema)
+    assert 1==2
+
     return serialized_schema

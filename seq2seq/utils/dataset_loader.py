@@ -18,6 +18,8 @@ from seq2seq.utils.dataset import (
 )
 from seq2seq.utils.spider import spider_add_serialized_schema, spider_pre_process_function
 from seq2seq.utils.cosql import cosql_add_serialized_schema, cosql_pre_process_function
+from seq2seq.utils.squall import squall_add_serialized_schema, squall_pre_process_function
+from seq2seq.datasets.squall.squall import *
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +34,6 @@ def _log_duplicate_count(dataset: Dataset, dataset_name: str, split: str) -> Non
         logger.warning(
             f"The split ``{split}`` of the dataset ``{dataset_name}`` contains {duplicate_count} duplicates out of {num_examples} examples"
         )
-
-
 
 
 def load_dataset(
@@ -66,24 +66,25 @@ def load_dataset(
     assert 1==2
     ##################
 
-    # _squall_dataset_dict: Callable[[], DatasetDict] = lambda: datasets.load.load_dataset(
-    #     path=data_args.dataset_paths["squall"], cache_dir=model_args.cache_dir
-    # )
+    _squall_dataset_dict: Callable[[], DatasetDict] = lambda: load_squall_dataset_dict(from_json=False, cache_dir=model_args.cache_dir)
 
+    _squall_add_serialized_schema = lambda ex: squall_add_serialized_schema(
+        ex=ex,
+        data_training_args=data_training_args,
+    )
+
+    
     # _squall_metric: Callable[[], Metric] = lambda: datasets.load.load_metric(
     #     path=data_args.metric_paths["squall"], config_name=data_args.metric_config, test_suite_db_dir=data_args.test_suite_db_dir
     # )
-    # _squall_add_serialized_schema = lambda ex: squall_add_serialized_schema(
-    #     ex=ex,
-    #     data_training_args=data_training_args,
-    # )
-    # _squall_pre_process_function = lambda batch, max_source_length, max_target_length: squall_pre_process_function(
-    #     batch=batch,
-    #     max_source_length=max_source_length,
-    #     max_target_length=max_target_length,
-    #     data_training_args=data_training_args,
-    #     tokenizer=tokenizer,
-    # )
+ 
+    _squall_pre_process_function = lambda batch, max_source_length, max_target_length: squall_pre_process_function(
+        batch=batch,
+        max_source_length=max_source_length,
+        max_target_length=max_target_length,
+        data_training_args=data_training_args,
+        tokenizer=tokenizer,
+    )
 
     ##################
 
@@ -138,6 +139,14 @@ def load_dataset(
             dataset_dict=_spider_dataset_dict(),
             add_serialized_schema=_spider_add_serialized_schema,
             pre_process_function=_spider_pre_process_function,
+            **_prepare_splits_kwargs,
+        )
+    elif data_args.dataset == "squall":
+        # metirc = _squall_metirc()
+        dataset_splits = prepare_splits(
+            dataset_dict=_squall_dataset_dict(),
+            add_serialized_schema=_squall_add_serialized_schema,
+            pre_process_function=_squall_pre_process_function,
             **_prepare_splits_kwargs,
         )
     elif data_args.dataset == "cosql":

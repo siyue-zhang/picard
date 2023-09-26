@@ -4,8 +4,8 @@ import json
 
 split_names = ['train', 'validation', 'test']
 
-def load_squall_dataset_dict(from_json=False):
-    hg_dataset = datasets.load.load_dataset("siyue/squall", "1")
+def load_squall_dataset_dict(from_json=False, cache_dir='./'):
+    hg_dataset = datasets.load.load_dataset("siyue/squall", "1", cache_dir=cache_dir)
 
     if not from_json:
         formated_squall_dataset_dict = {}
@@ -56,7 +56,7 @@ def load_squall_dataset_dict(from_json=False):
             with open(f"./formatted_squall_{split}.json", "w") as outfile:
                 json.dump({'data':formated_squall_dataset_dict[split]}, outfile)
 
-    dataset = datasets.load_dataset('json', data_files={s:f'./formatted_squall_{s}.json' for s in split_names}, field='data')
+    dataset = datasets.load_dataset('json', data_files={s:f'./formatted_squall_{s}.json' for s in split_names}, field='data', cache_dir=cache_dir)
 
     return dataset
 
