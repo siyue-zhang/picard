@@ -162,7 +162,7 @@ RUN set -eux; \
     chown -R $TOOLKIT_USER_ID:$TOOLKIT_GROUP_ID /app/.local/rustup;
 
 # Install Haskell toolchain
-# tens of bugs
+# tons of bugs
 ENV BOOTSTRAP_HASKELL_MINIMAL=yes \
     GHCUP_USE_XDG_DIRS=yes \
     GHCUP_INSTALL_BASE_PREFIX=/app \
@@ -181,7 +181,7 @@ RUN buildDeps=" \
     && ghcup install ghc base-4.14.1.0 \
     && ghcup set ghc "8.10.4" \
     && export PATH="/app/.ghcup/bin:$PATH" \
-    && ghcup install cabal 3.8.1.0 \
+    && ghcup install cabal 3.10.1.0 \
     && cabal update \
     && apt-get install -y --no-install-recommends git \
     && apt-get clean \
@@ -189,7 +189,7 @@ RUN buildDeps=" \
     && git clone https://github.com/haskell/cabal.git \
     && cd cabal \
     && git checkout HEAD \
-    && sed -i 's/3.5.0.0/3.8.1.0/' */*.cabal \
+    && sed -i 's/3.5.0.0/3.10.1.0/' */*.cabal \
     && cabal install --package-env . cabal-install/ \
         --allow-newer=Cabal-QuickCheck:Cabal \
         --allow-newer=Cabal-described:Cabal \
