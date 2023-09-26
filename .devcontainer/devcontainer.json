@@ -22,6 +22,7 @@
         }
     },
     "mounts": [
-        "source=/home/ali-siyue/Projects/tableQA_text_to_SQL/data,target=/workspaces/picard/data,type=bind,consistency=cached"
+        "source=/home/siyue/Projects/tableQA_text_to_SQL/data,target=/workspaces/picard/data,type=bind,consistency=cached",
+        "source=/home/siyue/Projects/tableQA_text_to_SQL/third_party,target=/workspaces/picard/Third_party,type=bind,consistency=cached"    
     ]
 }

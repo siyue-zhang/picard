@@ -38,8 +38,8 @@ def load_squall_dataset_dict(from_json=False, cache_dir='./'):
                             formated_ex['db_column_names']['table_id'].append(0)
                             formated_ex['db_column_names']['column_name'].append(col+'_'+suffix)
                             formated_ex['db_column_types'].append(col_type)
-                formated_ex['db_primary_keys']: {'column_id': [0]}
-                formated_ex['db_foreign_keys']: {'column_id': [], 'other_column_id': []}
+                formated_ex['db_primary_keys'] = {'column_id': []}
+                formated_ex['db_foreign_keys'] = {'column_id': [], 'other_column_id': []}
                 
                 formated_ex['converted_query'] = []
                 for token in ex['sql']['value']:
@@ -53,10 +53,10 @@ def load_squall_dataset_dict(from_json=False, cache_dir='./'):
                 break
             formated_squall_dataset_dict[split].append(formated_ex)
 
-            with open(f"./formatted_squall_{split}.json", "w") as outfile:
+            with open(f"./data/squall/formatted_squall_{split}.json", "w") as outfile:
                 json.dump({'data':formated_squall_dataset_dict[split]}, outfile)
 
-    dataset = datasets.load_dataset('json', data_files={s:f'./formatted_squall_{s}.json' for s in split_names}, field='data', cache_dir=cache_dir)
+    dataset = datasets.load_dataset('json', data_files={s:f'./data/squall/formatted_squall_{s}.json' for s in split_names}, field='data', cache_dir=cache_dir)
 
     return dataset
 

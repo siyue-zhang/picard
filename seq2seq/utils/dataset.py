@@ -217,8 +217,7 @@ def _prepare_train_split(
     pre_process_function: Callable[[dict, Optional[int], Optional[int]], dict],
 ) -> TrainSplit:
     schemas = _get_schemas(examples=dataset)
-    print(schemas)
-    assert 1==2
+
     dataset = dataset.map(
         add_serialized_schema,
         batched=False,
@@ -292,6 +291,10 @@ def prepare_splits(
             add_serialized_schema=add_serialized_schema,
             pre_process_function=pre_process_function,
         )
+
+        print(train_split)
+        assert 99==11
+
 
     if training_args.do_eval:
         eval_split = _prepare_eval_split(
@@ -421,9 +424,5 @@ def serialize_schema(
         serialized_schema = db_id_str.format(db_id=db_id) + table_sep.join(tables)
     else:
         serialized_schema = table_sep.join(tables)
-    
-    print("CHECK")
-    print(serialized_schema)
-    assert 1==2
 
     return serialized_schema

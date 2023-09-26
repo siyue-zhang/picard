@@ -62,8 +62,6 @@ def load_dataset(
         tokenizer=tokenizer,
     )
 
-
-    assert 1==2
     ##################
 
     _squall_dataset_dict: Callable[[], DatasetDict] = lambda: load_squall_dataset_dict(from_json=False, cache_dir=model_args.cache_dir)
@@ -131,8 +129,11 @@ def load_dataset(
 
     if data_args.dataset == "spider":
         metric = _spider_metric()
+        tmp = _spider_dataset_dict()
+        tmp['train'] = Dataset.from_dict(tmp['train'][:10])
+        tmp['validation'] = Dataset.from_dict(tmp['validation'][:10])
         dataset_splits = prepare_splits(
-            dataset_dict=_spider_dataset_dict(),
+            dataset_dict=tmp,
             add_serialized_schema=_spider_add_serialized_schema,
             pre_process_function=_spider_pre_process_function,
             **_prepare_splits_kwargs,
