@@ -67,17 +67,13 @@ def load_dataset(
     ##################
 
     _squall_dataset_dict: Callable[[], DatasetDict] = lambda: load_squall_dataset_dict(from_json=False, cache_dir=model_args.cache_dir)
-
     _squall_add_serialized_schema = lambda ex: squall_add_serialized_schema(
         ex=ex,
         data_training_args=data_training_args,
     )
-
-    
-    # _squall_metric: Callable[[], Metric] = lambda: datasets.load.load_metric(
-    #     path=data_args.metric_paths["squall"], config_name=data_args.metric_config, test_suite_db_dir=data_args.test_suite_db_dir
-    # )
- 
+    _squall_metric: Callable[[], Metric] = lambda: datasets.load.load_metric(
+        path=data_args.metric_paths["squall"], config_name=data_args.metric_config, test_suite_db_dir=data_args.test_suite_db_dir
+    )
     _squall_pre_process_function = lambda batch, max_source_length, max_target_length: squall_pre_process_function(
         batch=batch,
         max_source_length=max_source_length,

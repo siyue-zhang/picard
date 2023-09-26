@@ -1,4 +1,4 @@
-ARG BASE_IMAGE
+ARG BASE_IMAGE=pytorch/pytorch:1.9.0-cuda11.1-cudnn8-devel
 
 # ------------------------
 # Target: dev
@@ -74,8 +74,11 @@ RUN cd /app/third_party/fmt/ \
     && cd .. \
     && rm -rf _build
 COPY --chown=$TOOLKIT_USER_ID:$TOOLKIT_GROUP_ID third_party/folly /app/third_party/folly/
-RUN pip install cython \
+# executor.cpp file already exists, it is a bug
+# cython==0.29.28
+RUN pip install cython==0.29.28 \
     && cd /app/third_party/folly \
+    && rm /app/third_party/folly/folly/python/executor.cpp \
     && mkdir _build \
     && cd _build \
     && cmake -DBUILD_SHARED_LIBS=ON -DPYTHON_EXTENSIONS=ON -DBUILD_EXAMPLES=off -DBUILD_TESTS=off ../. \
@@ -135,6 +138,7 @@ RUN cd /app/third_party/fbthrift \
 ENV RUSTUP_HOME=/app/.local/rustup \
     CARGO_HOME=/app/.local/cargo \
     PATH=/app/.local/cargo/bin:$PATH
+
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
