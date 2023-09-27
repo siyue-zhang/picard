@@ -149,7 +149,7 @@ class DataArguments:
     )
     metric_config: str = field(
         default="both",
-        metadata={"help": "Choose between ``exact_match``, ``test_suite``, or ``both``."},
+        metadata={"help": "Choose between ``exact_match``, ``test_suite``, ``both``, ``execution_accuracy``."},
     )
     #we are referencing spider_realistic to spider metrics only as both use the main spider dataset as base.
     metric_paths: Dict[str, str] = field(
@@ -158,7 +158,8 @@ class DataArguments:
             "spider_realistic" : "./seq2seq/metrics/spider",
             "cosql": "./seq2seq/metrics/cosql",
             "spider_syn":"./seq2seq/metrics/spider",
-            "spider_dk":"./seq2seq/metrics/spider"
+            "spider_dk":"./seq2seq/metrics/spider",
+            "squall":"./seq2seq/metrics/squall",
         },
         metadata={"help": "Paths of the metric modules."},
     )
@@ -291,10 +292,6 @@ def prepare_splits(
             add_serialized_schema=add_serialized_schema,
             pre_process_function=pre_process_function,
         )
-
-        print(train_split)
-        assert 99==11
-
 
     if training_args.do_eval:
         eval_split = _prepare_eval_split(

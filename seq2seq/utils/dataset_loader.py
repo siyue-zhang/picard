@@ -140,7 +140,7 @@ def load_dataset(
             **_prepare_splits_kwargs,
         )
     elif data_args.dataset == "squall":
-        # metirc = _squall_metirc()
+        metric = _squall_metric()
         dataset_splits = prepare_splits(
             dataset_dict=_squall_dataset_dict(),
             add_serialized_schema=_squall_add_serialized_schema,

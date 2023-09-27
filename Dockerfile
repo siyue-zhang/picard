@@ -90,6 +90,7 @@ RUN pip install cython==0.29.28 \
     && pip install /app/folly-0.0.1-cp37-cp37m-linux_x86_64.whl \
     && cd .. \
     && rm -rf _build
+
 COPY --chown=$TOOLKIT_USER_ID:$TOOLKIT_GROUP_ID third_party/rsocket-cpp /app/third_party/rsocket-cpp/
 RUN cd /app/third_party/rsocket-cpp \
     && mkdir _build \
@@ -353,7 +354,16 @@ COPY --chown=$TOOLKIT_USER_ID:$TOOLKIT_GROUP_ID ./third_party/spider /app/third_
 COPY --chown=$TOOLKIT_USER_ID:$TOOLKIT_GROUP_ID ./third_party/test_suite /app/third_party/test_suite/
 COPY --chown=$TOOLKIT_USER_ID:$TOOLKIT_GROUP_ID ./configs /app/configs/
 
-# Test Picard
-RUN python /app/tests/test_picard_client.py \
-    && rm -rf /app/seq2seq/__pycache__ \
-    && rm -rf /app/gen-py3/picard/__pycache__
+# Additional for wtq evaluator
+RUN pip install stanfordnlp
+RUN apt-get update -y \
+    && apt-get install -y nodejs npm \
+    && cd /workspaces/data/squall/eval \
+    && npm install file:sql-parser \
+    && npm install express \
+    && node evaluator.js
+
+# # Test Picard
+# RUN python /workspaces/tests/test_picard_client.py \
+#     && rm -rf /app/seq2seq/__pycache__ \
+#     && rm -rf /app/gen-py3/picard/__pycache__

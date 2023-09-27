@@ -5,7 +5,6 @@ from seq2seq.metrics.spider.spider_test_suite import compute_test_suite_metric
 from seq2seq.metrics.spider.spider_exact_match import compute_exact_match_metric
 import datasets
 
-from root import *
 from data.squall.model.evaluator import Evaluator
 from typing import Dict, Any
 
@@ -82,6 +81,8 @@ class Squall(datasets.Metric):
                     "references": {
                         "query": datasets.Value("string"),
                         "question": datasets.Value("string"),
+                        "nt": datasets.Value("string"),
+                        "header": datasets.features.Sequence(datasets.Value("string")),
                         "context": datasets.Value("string"),
                         "label": datasets.Value("string"),
                         "db_id": datasets.Value("string"),
@@ -106,31 +107,32 @@ class Squall(datasets.Metric):
         )
 
     def _postprocess(self, predictions, references):
+
         # preds and labels for all eval samples
         # prepare the prediction format for the wtq evaluator
         predictions = []
-        # for idex, (pred, label) in enumerate(zip(preds, labels)):
-        #     table_id = eval_dataset["tbl"][idex]
-        #     nt_id = eval_dataset["nt"][idex]
-        #     header = eval_dataset["header"][idex]
-        #     # repalce the natural language header with c1, c2, ... headers
-        #     for j, h in enumerate(header):
-        #         pred=pred.replace(h, 'c'+str(j+1))
-        #         label=label.replace(h, 'c'+str(j+1))
-        #     result_dict = {"sql": pred, "id": nt_id, "tgt": label}
-        #     res = {"table_id": table_id, "result": [result_dict]}
-        #     predictions.append(res)
+        for pred, ref in enumerate(zip(predictions, references)):
+            table_id = ref['db_id']
+            nt_id = ref['nt']
+            header = ref['header']
+            # repalce the natural language header with c1, c2, ... headers
+            for j, h in enumerate(header):
+                pred=pred.replace(h, 'c'+str(j+1))
+            result_dict = {"sql": pred, "id": nt_id, "tgt": ref['query']}
+            res = {"table_id": table_id, "result": [result_dict]}
+            predictions.append(res)
+
         return predictions
 
     
     def _compute_execuntion_accuracy(self, predictions, references) -> Dict[str, Any]:
+        total = len(predictions)
         evaluator = Evaluator(
-                f"{project_root}data/squall/tables/tagged/",
-                f"{project_root}data/squall/tables/db/",
-                f"{project_root}third_party/stanford-corenlp-full-2018-10-05/"
+                f"/workspaces/picard/data/squall/tables/tagged/",
+                f"/workspaces/picard/data/squall/tables/db/",
+                f"/workspaces/picard/Third_party/stanford-corenlp-full-2018-10-05/"
         )
         predictions = self._postprocess(predictions, references)
-        total = 0
         ex_accu = evaluator.evaluate(predictions)
         lf_accu = 0
         for d in predictions:
@@ -146,7 +148,7 @@ class Squall(datasets.Metric):
     def _compute(self, predictions, references):
 
         if self.config_name == "execution_accuracy":
-            res = self._compute_execuntion_accuracy(predictions, references, db_dir=self.test_suite_db_dir)
+            res = self._compute_execuntion_accuracy(predictions, references)
         else:
             res = dict()
 

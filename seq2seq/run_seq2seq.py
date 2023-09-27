@@ -30,7 +30,7 @@ from seq2seq.utils.dataset import DataTrainingArguments, DataArguments
 from seq2seq.utils.dataset_loader import load_dataset
 from seq2seq.utils.spider import SpiderTrainer
 from seq2seq.utils.cosql import CoSQLTrainer
-
+from seq2seq.utils.squall import SquallTrainer
 
 def main() -> None:
     # See all possible arguments by passing the --help flag to this script.
@@ -148,8 +148,6 @@ def main() -> None:
         tokenizer=tokenizer,
     )
 
-    assert 2==3, 'test stop here.'
-
     # Initialize Picard if necessary
     with PicardLauncher() if picard_args.launch_picard and training_args.local_rank <= 0 else nullcontext(None):
         # Get Picard model class wrapper
@@ -201,9 +199,8 @@ def main() -> None:
             trainer = SpiderTrainer(**trainer_kwargs)
         elif data_args.dataset in ["cosql", "cosql+spider"]:
             trainer = CoSQLTrainer(**trainer_kwargs)
-        elif data_args.dataset in ["squall",]:
-            # trainer = SquallTrainer(**trainer_kwargs)
-            pass
+        elif data_args.dataset in ["squall"]:
+            trainer = SquallTrainer(**trainer_kwargs)
         else:
             raise NotImplementedError()
 

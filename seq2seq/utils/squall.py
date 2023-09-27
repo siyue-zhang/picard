@@ -105,6 +105,7 @@ class SquallTrainer(Seq2SeqTrainer):
             {
                 "query": x["query"],
                 "nt": x["nt"],
+                "header": x["header"],
                 "question": x["question"],
                 "context": context,
                 "label": label,
@@ -128,6 +129,7 @@ class SquallTrainer(Seq2SeqTrainer):
 
     def _compute_metrics(self, eval_prediction: EvalPrediction) -> dict:
         predictions, label_ids, metas = eval_prediction
+
         if self.target_with_db_id:
             # Remove database id from all predictions
             predictions = [pred.split("|", 1)[-1].strip() for pred in predictions]
