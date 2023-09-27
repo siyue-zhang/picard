@@ -131,8 +131,8 @@ def load_dataset(
         metric = _spider_metric()
         # for debug
         tmp = _spider_dataset_dict()
-        tmp['train'] = Dataset.from_dict(tmp['train'][:10])
-        tmp['validation'] = Dataset.from_dict(tmp['validation'][:10])
+        # tmp['train'] = Dataset.from_dict(tmp['train'][:10])
+        # tmp['validation'] = Dataset.from_dict(tmp['validation'][:10])
         dataset_splits = prepare_splits(
             dataset_dict=tmp,
             add_serialized_schema=_spider_add_serialized_schema,
@@ -141,8 +141,12 @@ def load_dataset(
         )
     elif data_args.dataset == "squall":
         metric = _squall_metric()
+        # for debug
+        tmp = _squall_dataset_dict()
+        # tmp['train'] = Dataset.from_dict(tmp['train'][:5])
+        # tmp['validation'] = Dataset.from_dict(tmp['validation'][:5])
         dataset_splits = prepare_splits(
-            dataset_dict=_squall_dataset_dict(),
+            dataset_dict=tmp,
             add_serialized_schema=_squall_add_serialized_schema,
             pre_process_function=_squall_pre_process_function,
             **_prepare_splits_kwargs,

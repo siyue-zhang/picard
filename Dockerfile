@@ -356,12 +356,9 @@ COPY --chown=$TOOLKIT_USER_ID:$TOOLKIT_GROUP_ID ./configs /app/configs/
 
 # Additional for wtq evaluator
 RUN pip install stanfordnlp
+RUN pip install --upgrade wandb
 RUN apt-get update -y \
-    && apt-get install -y nodejs npm \
-    && cd /workspaces/data/squall/eval \
-    && npm install file:sql-parser \
-    && npm install express \
-    && node evaluator.js
+    && apt-get install -y nodejs npm
 
 # # Test Picard
 # RUN python /workspaces/tests/test_picard_client.py \

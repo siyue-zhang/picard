@@ -74,7 +74,7 @@ def squall_pre_process_function(
             normalize_query=data_training_args.normalize_query,
             target_with_db_id=data_training_args.target_with_db_id,
         )
-        for db_id, query in zip(batch["db_id"], batch["query"])
+        for db_id, query in zip(batch["db_id"], batch["converted_query"])
     ]
 
     # Setup the tokenizer for targets
@@ -88,6 +88,7 @@ def squall_pre_process_function(
         )
 
     model_inputs["labels"] = labels["input_ids"]
+
     return model_inputs
 
 

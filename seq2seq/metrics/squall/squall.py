@@ -107,11 +107,10 @@ class Squall(datasets.Metric):
         )
 
     def _postprocess(self, predictions, references):
-
         # preds and labels for all eval samples
         # prepare the prediction format for the wtq evaluator
-        predictions = []
-        for pred, ref in enumerate(zip(predictions, references)):
+        post_predictions = []
+        for pred, ref in zip(predictions, references):
             table_id = ref['db_id']
             nt_id = ref['nt']
             header = ref['header']
@@ -120,10 +119,9 @@ class Squall(datasets.Metric):
                 pred=pred.replace(h, 'c'+str(j+1))
             result_dict = {"sql": pred, "id": nt_id, "tgt": ref['query']}
             res = {"table_id": table_id, "result": [result_dict]}
-            predictions.append(res)
-
-        return predictions
-
+            post_predictions.append(res)
+            
+        return post_predictions
     
     def _compute_execuntion_accuracy(self, predictions, references) -> Dict[str, Any]:
         total = len(predictions)
