@@ -8,17 +8,18 @@
 		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
 		"dockerfile": "../Dockerfile"
 	},
-    "containerEnv": {
-        "NVIDIA_VISIBLE_DEVICES": "2,3"
-    },
-    "runArgs": [
-        "--runtime=nvidia"
-    ],
+    // "containerEnv": {
+    //     "NVIDIA_VISIBLE_DEVICES": "2,3"
+    // },
+    // "runArgs": [
+    //     "--runtime=nvidia"
+    // ],
     "customizations": {
         "vscode": {
           "extensions": [
             "ms-python.python", 
-            "ms-azuretools.vscode-docker"]
+            "ms-azuretools.vscode-docker",
+            "haskell.haskell"]
         }
     },
     "mounts": [

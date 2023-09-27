@@ -129,6 +129,7 @@ def load_dataset(
 
     if data_args.dataset == "spider":
         metric = _spider_metric()
+        # for debug
         tmp = _spider_dataset_dict()
         tmp['train'] = Dataset.from_dict(tmp['train'][:10])
         tmp['validation'] = Dataset.from_dict(tmp['validation'][:10])
