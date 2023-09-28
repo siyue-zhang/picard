@@ -144,7 +144,7 @@ def load_dataset(
         # for debug
         tmp = _squall_dataset_dict()
         # tmp['train'] = Dataset.from_dict(tmp['train'][:5])
-        # tmp['validation'] = Dataset.from_dict(tmp['validation'][:5])
+        # tmp['validation'] = Dataset.from_dict(tmp['validation'][:25])
         dataset_splits = prepare_splits(
             dataset_dict=tmp,
             add_serialized_schema=_squall_add_serialized_schema,

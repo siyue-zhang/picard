@@ -57,7 +57,7 @@ def main() -> None:
     
     # If model_name_or_path includes ??? instead of the number of steps, 
     # we load the latest checkpoint.
-    if 'checkpoint-???' in model_args.model_name_or_path:
+    if 'checkpoint-' in model_args.model_name_or_path:
         model_args.model_name_or_path = get_last_checkpoint(
             os.path.dirname(model_args.model_name_or_path))
         logger.info(f"Resolve model_name_or_path to {model_args.model_name_or_path}")

@@ -92,9 +92,8 @@ class Seq2SeqTrainer(transformers.trainer_seq2seq.Seq2SeqTrainer):
                 eval_examples,
                 eval_dataset,
                 output.predictions,
-                "eval_{}".format(self.state.epoch),
             )
-            output.metrics.update(self.compute_metrics(eval_preds))
+            output.metrics.update(self.compute_metrics(eval_preds, "eval_{}".format(self.state.global_step)))
 
         n_samples = len(eval_dataset if eval_dataset is not None else self.eval_dataset)
         output.metrics.update(speed_metrics(metric_key_prefix, start_time, n_samples))
@@ -157,8 +156,8 @@ class Seq2SeqTrainer(transformers.trainer_seq2seq.Seq2SeqTrainer):
                 )
 
             eval_preds = self._post_process_function(
-                test_examples, test_dataset, output.predictions, metric_key_prefix)
-            output.metrics.update(self.compute_metrics(eval_preds))
+                test_examples, test_dataset, output.predictions)
+            output.metrics.update(self.compute_metrics(eval_preds, metric_key_prefix))
 
         output.metrics.update(speed_metrics(metric_key_prefix, start_time, len(test_dataset)))
 

@@ -94,7 +94,7 @@ def squall_pre_process_function(
 
 class SquallTrainer(Seq2SeqTrainer):
     def _post_process_function(
-        self, examples: Dataset, features: Dataset, predictions: np.ndarray, stage: str
+        self, examples: Dataset, features: Dataset, predictions: np.ndarray,
     ) -> EvalPrediction:
         inputs = self.tokenizer.batch_decode([f["input_ids"] for f in features], skip_special_tokens=True)
         label_ids = [f["labels"] for f in features]
@@ -105,6 +105,8 @@ class SquallTrainer(Seq2SeqTrainer):
         metas = [
             {
                 "query": x["query"],
+                "query_tokens": x["query_tokens"],
+                "converted_query": x["converted_query"],
                 "nt": x["nt"],
                 "header": x["header"],
                 "question": x["question"],
@@ -120,15 +122,15 @@ class SquallTrainer(Seq2SeqTrainer):
         ]
         predictions = self.tokenizer.batch_decode(predictions, skip_special_tokens=True)
         assert len(metas) == len(predictions)
-        with open(f"{self.args.output_dir}/predictions_{stage}.json", "w") as f:
-            json.dump(
-                [dict(**{"prediction": prediction}, **meta) for prediction, meta in zip(predictions, metas)],
-                f,
-                indent=4,
-            )
+        # with open(f"{self.args.output_dir}/predictions_{stage}.json", "w") as f:
+        #     json.dump(
+        #         [dict(**{"prediction": prediction}, **meta) for prediction, meta in zip(predictions, metas)],
+        #         f,
+        #         indent=4,
+        # )
         return EvalPrediction(predictions=predictions, label_ids=label_ids, metas=metas)
 
-    def _compute_metrics(self, eval_prediction: EvalPrediction) -> dict:
+    def _compute_metrics(self, eval_prediction: EvalPrediction, stage: str) -> dict:
         predictions, label_ids, metas = eval_prediction
 
         if self.target_with_db_id:
@@ -141,4 +143,8 @@ class SquallTrainer(Seq2SeqTrainer):
         # decoded_references = self.tokenizer.batch_decode(label_ids, skip_special_tokens=True)
         # references = [{**{"query": r}, **m} for r, m in zip(decoded_references, metas)]
         references = metas
-        return self.metric.compute(predictions=predictions, references=references)
+        return self.metric.compute(
+            predictions=predictions, 
+            references=references, 
+            output_dir=self.args.output_dir,
+            stage=stage)

@@ -361,6 +361,6 @@ RUN apt-get update -y \
     && apt-get install -y nodejs npm
 
 # # Test Picard
-# RUN python /workspaces/tests/test_picard_client.py \
+# RUN python /workspaces/picard/tests/test_picard_client.py \
 #     && rm -rf /app/seq2seq/__pycache__ \
 #     && rm -rf /app/gen-py3/picard/__pycache__

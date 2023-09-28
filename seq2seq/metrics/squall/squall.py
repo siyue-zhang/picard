@@ -7,6 +7,7 @@ import datasets
 
 from data.squall.model.evaluator import Evaluator
 from typing import Dict, Any
+import json
 
 _DESCRIPTION = """
 Squall metrics.
@@ -80,6 +81,8 @@ class Squall(datasets.Metric):
                     "predictions": datasets.Value("string"),
                     "references": {
                         "query": datasets.Value("string"),
+                        'query_tokens': datasets.features.Sequence(datasets.Value("string")),
+                        "converted_query": datasets.Value("string"),
                         "question": datasets.Value("string"),
                         "nt": datasets.Value("string"),
                         "header": datasets.features.Sequence(datasets.Value("string")),
@@ -131,7 +134,8 @@ class Squall(datasets.Metric):
                 f"/workspaces/picard/Third_party/stanford-corenlp-full-2018-10-05/"
         )
         predictions = self._postprocess(predictions, references)
-        ex_accu = evaluator.evaluate(predictions)
+        ex_accu, correct_flag = evaluator.evaluate(predictions, with_correct_flag=True)
+        assert len(correct_flag)==total
         lf_accu = 0
         for d in predictions:
             if d['result'][0]['sql'] == d['result'][0]['tgt']:
@@ -140,14 +144,24 @@ class Squall(datasets.Metric):
         return {
                 "execution_accuracy": ex_accu/total, 
                 "logical_form_accuracy": lf_accu/total
-        }
+        }, correct_flag
 
 
-    def _compute(self, predictions, references):
+    def _compute(self, predictions, references, output_dir, stage):
 
         if self.config_name == "execution_accuracy":
-            res = self._compute_execuntion_accuracy(predictions, references)
+            res, correct_flag = self._compute_execuntion_accuracy(predictions, references)
         else:
             res = dict()
+
+        for i in range(len(correct_flag)):
+            references[i]["execution_accuracy"] = correct_flag[i]
+
+        with open(f"{output_dir}/predictions_{stage}.json", "w") as f:
+            json.dump(
+                [dict(**{"prediction": prediction}, **meta) for prediction, meta in zip(predictions, references)],
+                f,
+                indent=4,
+        )
 
         return {**res}

@@ -15,6 +15,7 @@ def load_squall_dataset_dict(from_json=False, cache_dir='./'):
             for ex in data_split:
                 formated_ex = {}
                 formated_ex['query'] = ' '.join(ex['sql']['value'])
+                formated_ex['query_tokens'] = ex['sql']['value']
                 formated_ex['question'] = ' '.join(ex['nl'])
                 formated_ex['nt'] = ex['nt']
                 formated_ex['db_id'] = ex['tbl']
