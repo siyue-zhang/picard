@@ -23,6 +23,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
+    new_path = '/app/gen-py3'
+    sys.path.insert(0, new_path)
     from picard.clients import Picard
     from picard.types import (
         FeedException,

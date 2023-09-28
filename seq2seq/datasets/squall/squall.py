@@ -54,11 +54,11 @@ def load_squall_dataset_dict(from_json=False, cache_dir='./'):
                 # break
                 formated_squall_dataset_dict[split].append(formated_ex)
 
-            with open(f"./data/squall/formatted_squall_{split}.json", "w") as outfile:
+            with open(f"./data/squall/picard/formatted_squall_{split}.json", "w") as outfile:
                 json.dump({'data':formated_squall_dataset_dict[split]}, outfile)
 
 
-    dataset = datasets.load_dataset('json', data_files={s:f'./data/squall/formatted_squall_{s}.json' for s in split_names}, field='data', cache_dir=cache_dir)
+    dataset = datasets.load_dataset('json', data_files={s:f'./data/squall/picard/formatted_squall_{s}.json' for s in split_names}, field='data', cache_dir=cache_dir)
 
     return dataset
 

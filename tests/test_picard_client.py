@@ -6,6 +6,9 @@ from random import sample
 
 from thrift.py3.client import get_client
 from thrift.py3.common import Protocol
+
+new_path = '/app/gen-py3'
+sys.path.insert(0, new_path)
 from picard.clients import Picard
 from picard.types import (
     FeedTimeoutFailure,

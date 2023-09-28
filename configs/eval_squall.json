@@ -18,7 +18,7 @@
     "seed": 1,
     "report_to": ["wandb"],
     "predict_with_generate": true,
-    "num_beams": 4,
+    "num_beams": 1,
     "num_beam_groups": 1,
     "diversity_penalty": 0.0,
     "max_val_samples": 1034,
@@ -29,6 +29,6 @@
     "picard_max_tokens_to_check": 2,
     "eval_accumulation_steps": 1,
     "metric_config": "execution_accuracy",
-    "val_max_target_length": 512,
+    "val_max_target_length": 128,
     "val_max_time": 1200
 }
