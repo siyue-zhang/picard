@@ -9,7 +9,7 @@
 		"dockerfile": "../Dockerfile"
 	},
     "containerEnv": {
-        "NVIDIA_VISIBLE_DEVICES": "2,3"
+        "NVIDIA_VISIBLE_DEVICES": "0,1,2,3"
     },
     "runArgs": [
         "--runtime=nvidia"
@@ -23,9 +23,8 @@
         }
     },
     "mounts": [
-        "source=/home/ali-siyue/Projects/tableQA_text_to_SQL/data,target=/workspaces/picard/data,type=bind,consistency=cached",
-        "source=/home/ali-siyue/Projects/tableQA_text_to_SQL/third_party,target=/workspaces/picard/Third_party,type=bind,consistency=cached"
-        // "source=/home/ali-siyue/Projects/tableQA_text_to_SQL/root.py,target=/workspaces/picard/root.py,type=bind,consistency=cached"    
+        "source=/home/siyue/Projects/tableQA_text_to_SQL/data,target=/workspaces/picard/data,type=bind,consistency=cached",
+        "source=/home/siyue/Projects/tableQA_text_to_SQL/third_party,target=/workspaces/picard/Third_party,type=bind,consistency=cached"
     ],
     "postCreateCommand": "bash -c \"cd /workspaces/picard/data/squall/eval && npm install file:sql-parser && npm install express\""
 

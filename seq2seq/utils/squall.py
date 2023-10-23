@@ -89,6 +89,8 @@ def squall_pre_process_function(
 
     model_inputs["labels"] = labels["input_ids"]
 
+    model_inputs["squall_meta"] = [x['column_name'] for x in batch["db_column_names"]]
+
     return model_inputs
 
 

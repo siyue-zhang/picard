@@ -52,7 +52,6 @@ class Seq2SeqTrainer(transformers.trainer_seq2seq.Seq2SeqTrainer):
         self._max_length = max_length
         self._max_time = max_time
         self._num_beams = num_beams
-
         # memory metrics - must set up as early as possible
         self._memory_tracker.start()
 
@@ -92,8 +91,14 @@ class Seq2SeqTrainer(transformers.trainer_seq2seq.Seq2SeqTrainer):
                 eval_examples,
                 eval_dataset,
                 output.predictions,
+                # spider
+                # stage='eval',
             )
+            # squall
             output.metrics.update(self.compute_metrics(eval_preds, "eval_{}".format(self.state.global_step)))
+            
+            # others
+            # output.metrics.update(self.compute_metrics(eval_preds))
 
         n_samples = len(eval_dataset if eval_dataset is not None else self.eval_dataset)
         output.metrics.update(speed_metrics(metric_key_prefix, start_time, n_samples))

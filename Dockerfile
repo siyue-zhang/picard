@@ -360,7 +360,7 @@ RUN pip install --upgrade wandb
 RUN apt-get update -y \
     && apt-get install -y nodejs npm
 
-# ENV PYTHONPATH=$PYTHONPATH:/app/gen-py3
+ENV PYTHONPATH=$PYTHONPATH:/app/gen-py3
 
 # # Test Picard
 # RUN python /workspaces/picard/tests/test_picard_client.py \

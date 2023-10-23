@@ -1,6 +1,7 @@
 # Set up logging
-import sys
+import sys, os
 import logging
+os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",

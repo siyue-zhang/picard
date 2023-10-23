@@ -150,3 +150,7 @@ wandb/*
 database/*
 .DS_Store
 *.props
+
+eval-spider/
+eval-squall/
+train-spider/
