@@ -86,19 +86,24 @@ class Seq2SeqTrainer(transformers.trainer_seq2seq.Seq2SeqTrainer):
                 columns=list(eval_dataset.features.keys()),
             )
 
-        if eval_examples is not None and eval_dataset is not None and self.compute_metrics is not None:
-            eval_preds = self._post_process_function(
-                eval_examples,
-                eval_dataset,
-                output.predictions,
-                # spider
-                # stage='eval',
-            )
-            # squall
-            output.metrics.update(self.compute_metrics(eval_preds, "eval_{}".format(self.state.global_step)))
-            
-            # others
-            # output.metrics.update(self.compute_metrics(eval_preds))
+        if 'squall' in self.__str__():
+            if eval_examples is not None and eval_dataset is not None and self.compute_metrics is not None:
+                eval_preds = self._post_process_function(
+                    eval_examples,
+                    eval_dataset,
+                    output.predictions,
+                )
+                # squall
+                output.metrics.update(self.compute_metrics(eval_preds, "eval_{}".format(self.state.global_step)))
+        else:
+            if eval_examples is not None and eval_dataset is not None and self.compute_metrics is not None:
+                eval_preds = self._post_process_function(
+                    eval_examples,
+                    eval_dataset,
+                    output.predictions,
+                    stage='eval',
+                )
+                output.metrics.update(self.compute_metrics(eval_preds))
 
         n_samples = len(eval_dataset if eval_dataset is not None else self.eval_dataset)
         output.metrics.update(speed_metrics(metric_key_prefix, start_time, n_samples))

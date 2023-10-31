@@ -112,7 +112,6 @@ def with_picard(
     schemas: Optional[Dict[str, dict]] = None,
 ):
     schema_cache: Dict[str, dict] = deepcopy(schemas) if schemas is not None else dict()
-
     def get_picard_client() -> AsyncContextManager[Picard]:
         return get_client(
             Picard,
@@ -347,14 +346,18 @@ class PicardLogitsProcessor(LogitsProcessor):
         for r in res:
             if isinstance(r.feedResult.value, FeedTimeoutFailure):
                 logger.warning(f"timeout failure: {input_ids[r.batchId].tolist() + [r.topToken]}")
+                print(f"timeout failure: {input_ids[r.batchId].tolist() + [r.topToken]}")
                 indices_to_remove[r.batchId, r.topToken] = True
             elif isinstance(r.feedResult.value, FeedParseFailure):
                 logger.debug(f"parsing failure: {input_ids[r.batchId].tolist() + [r.topToken]}")
+                print(f"parsing failure: {input_ids[r.batchId].tolist() + [r.topToken]}")
                 indices_to_remove[r.batchId, r.topToken] = True
             elif isinstance(r.feedResult.value, FeedPartialSuccess):
                 logger.debug(f"parsing partial: {input_ids[r.batchId].tolist() + [r.topToken]}")
+                print(f"parsing partial: {input_ids[r.batchId].tolist() + [r.topToken]}")
             elif isinstance(r.feedResult.value, FeedCompleteSuccess):
                 logger.info(f"parsing success: {input_ids[r.batchId].tolist() + [r.topToken]}")
+                print(f"parsing success: {input_ids[r.batchId].tolist() + [r.topToken]}")
             else:
                 # unexpected parsing result
                 raise ValueError("unexpected picard parsing result")

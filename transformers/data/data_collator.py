@@ -565,7 +565,7 @@ class DataCollatorForSeq2Seq:
             for f in features:
                 squall_meta.append(f['squall_meta'])
                 tmp.append({k:f[k] for k in f if k != 'squall_meta'})
-        features = tmp
+            features = tmp
 
         if return_tensors is None:
             return_tensors = self.return_tensors

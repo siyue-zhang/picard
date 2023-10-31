@@ -1973,6 +1973,17 @@ class GenerationMixin:
 
         >>> print("Generated:", tokenizer.batch_decode(outputs, skip_special_tokens=True))
         ```"""
+
+        # new, grammar keywords
+        AGG_OPS = ['max', 'min', 'count', 'sum', 'avg']
+        ORDER_OPS = ['asc', 'desc']
+        LOGIC_OPS = ['and', 'or']
+        names = ['AGG_OPS', 'ORDER_OPS', 'LOGIC_OPS']
+        ops = [AGG_OPS, ORDER_OPS, LOGIC_OPS]
+        keywords = {}
+        for i in range(len(names)):
+            keywords[names[i]] = {tok: tokenizer.encode(tok)[:-1] for tok in ops[i]}
+
         # init values
         logits_processor = logits_processor if logits_processor is not None else LogitsProcessorList()
         stopping_criteria = stopping_criteria if stopping_criteria is not None else StoppingCriteriaList()
@@ -2084,19 +2095,19 @@ class GenerationMixin:
             vocab_size = next_token_scores.shape[-1]
             next_token_scores = next_token_scores.view(batch_size, num_beams * vocab_size)
             
-            grammar_constrained = True
+            grammar_constrained = False
             if grammar_constrained:
-                next_token_scores = grammar_filter(input_ids, next_token_scores, tokenizer, squall_meta)
+                next_token_scores = grammar_filter(input_ids, next_token_scores, tokenizer, squall_meta, keywords)
 
             next_token_scores, next_tokens = torch.topk(
                 next_token_scores, 2 * num_beams, dim=1, largest=True, sorted=True
             )
-            print('after topk ', next_tokens)
+            # print('after topk ', next_tokens)
             next_indices = torch_int_div(next_tokens, vocab_size)
             next_tokens = next_tokens % vocab_size
 
-            if input_ids.size()[1] == 5:
-                assert 1==2
+            # if input_ids.size()[1] == 7:
+            #     assert 1==2
 
             # stateless
             beam_outputs = beam_scorer.process(

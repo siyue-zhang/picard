@@ -154,3 +154,9 @@ database/*
 eval-spider/
 eval-squall/
 train-spider/
+tree-sitter-sqlite/
+wandb/
+playground.py
+sqlite.so
+eval-squall-nopicard/
+eval-squall-picard/

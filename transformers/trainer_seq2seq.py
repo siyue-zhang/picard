@@ -184,6 +184,9 @@ class Seq2SeqTrainer(Trainer):
         if generated_tokens.shape[-1] < gen_kwargs["max_length"]:
             generated_tokens = self._pad_tensors_to_max_len(generated_tokens, gen_kwargs["max_length"])
 
+        if 'squall_meta' in inputs:
+            inputs = {k:inputs[k] for k in inputs if k != 'squall_meta'}
+            
         with torch.no_grad():
             with self.autocast_smart_context_manager():
                 outputs = model(**inputs)

@@ -1,7 +1,7 @@
 # Set up logging
 import sys, os
 import logging
-os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+os.environ["CUDA_VISIBLE_DEVICES"] = '2'
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
@@ -135,6 +135,12 @@ def main() -> None:
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
+    # print(tokenizer.decode([0,]))
+    # print(tokenizer.decode([4219]))
+    # print(tokenizer.decode([1738]))
+    # print(tokenizer.decode([7]))
+    # print(tokenizer.decode([14635]))
+    # assert 1==2
     assert isinstance(tokenizer, PreTrainedTokenizerFast), "Only fast tokenizers are currently supported"
     if isinstance(tokenizer, T5TokenizerFast):
         # In T5 `<` is OOV, see https://github.com/google-research/language/blob/master/language/nqg/tasks/spider/restore_oov.py
